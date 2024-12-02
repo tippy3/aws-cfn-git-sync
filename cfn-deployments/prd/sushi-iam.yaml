@@ -1,0 +1,5 @@
+template-file-path: cfn-templates/iam.yaml
+
+parameters:
+  env: prd
+  project: sushi

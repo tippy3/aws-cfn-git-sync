@@ -1,0 +1,5 @@
+template-file-path: cfn-templates/log.yaml
+
+parameters:
+  env: prd
+  project: yakiniku

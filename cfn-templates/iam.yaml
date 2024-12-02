@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  env:
+    Type: String
+  project:
+    Type: String
+
+Resources:
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Sub ${env}-${project}-user

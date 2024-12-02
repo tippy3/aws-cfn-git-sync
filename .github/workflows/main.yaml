@@ -1,0 +1,41 @@
+name: Create CloudFormation Git Sync
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  create-git-sync:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        conf:
+          - account: AWS_ACCOUNT_ID_PRD
+            branch: main
+            dir: cfn-deployments/prd
+            link-id: f81776f7-8db0-44cc-a7d4-7378c051d3d9
+          - account: AWS_ACCOUNT_ID_STG
+            branch: main
+            dir: cfn-deployments/stg
+            link-id: f919f952-e050-4b24-b375-021e494d49d6
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-northeast-1
+          role-to-assume: arn:aws:iam::${{ secrets[matrix.conf.account] }}:role/my-github-actions-role
+
+      - name: create-git-sync
+        env:
+          BRANCH: ${{ matrix.conf.branch }}
+          DIR: ${{ matrix.conf.dir }}
+          LINK_ID: ${{ matrix.conf.link-id }}
+          ROLE_ARN: arn:aws:iam::${{ secrets[matrix.conf.account] }}:role/my-cloudformation-role
+        run: |
+          ./create-git-sync.sh "$BRANCH" "$DIR" "$LINK_ID" "$ROLE_ARN"

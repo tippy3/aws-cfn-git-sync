@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  env:
+    Type: String
+  project:
+    Type: String
+
+Resources:
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${env}-${project}-log-group
